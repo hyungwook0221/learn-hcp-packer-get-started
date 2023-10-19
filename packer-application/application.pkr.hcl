@@ -16,20 +16,23 @@ data "hcp-packer-image" "ubuntu-east" {
   bucket_name    = "learn-packer-ubuntu"
   iteration_id   = data.hcp-packer-iteration.ubuntu.id
   cloud_provider = "aws"
-  region         = "us-east-2"
+  // region         = "us-east-2"
+  region         = "ap-northeast-2"
 }
 
-data "hcp-packer-image" "ubuntu-west" {
-  bucket_name    = "learn-packer-ubuntu"
-  iteration_id   = data.hcp-packer-iteration.ubuntu.id
-  cloud_provider = "aws"
-  region         = "us-west-1"
-}
+// data "hcp-packer-image" "ubuntu-west" {
+//   bucket_name    = "learn-packer-ubuntu"
+//   iteration_id   = data.hcp-packer-iteration.ubuntu.id
+//   cloud_provider = "aws"
+//   region         = "us-west-1"
+// }
 
 source "amazon-ebs" "application-east" {
   ami_name = "packer_AWS_{{timestamp}}"
 
-  region         = "us-east-2"
+  // region         = "us-east-2"
+  region         = "ap-northeast-2"
+  // source_ami     = data.hcp-packer-image.ubuntu-east.id
   source_ami     = data.hcp-packer-image.ubuntu-east.id
   instance_type  = "t2.small"
   ssh_username   = "ubuntu"
@@ -40,19 +43,19 @@ source "amazon-ebs" "application-east" {
   }
 }
 
-source "amazon-ebs" "application-west" {
-  ami_name = "packer_AWS_{{timestamp}}"
+// source "amazon-ebs" "application-west" {
+//   ami_name = "packer_AWS_{{timestamp}}"
 
-  region         = "us-west-1"
-  source_ami     = data.hcp-packer-image.ubuntu-west.id
-  instance_type  = "t2.small"
-  ssh_username   = "ubuntu"
-  ssh_agent_auth = false
+//   region         = "us-west-1"
+//   source_ami     = data.hcp-packer-image.ubuntu-west.id
+//   instance_type  = "t2.small"
+//   ssh_username   = "ubuntu"
+//   ssh_agent_auth = false
 
-  tags = {
-    Name = "learn-packer-application"
-  }
-}
+//   tags = {
+//     Name = "learn-packer-application"
+//   }
+// }
 
 build {
   hcp_packer_registry {
@@ -67,6 +70,6 @@ Some nice description about the image being published to HCP Packer Registry.
   }
   sources = [
     "source.amazon-ebs.application-east",
-    "source.amazon-ebs.application-west"
+    // "source.amazon-ebs.application-west"
   ]
 }
